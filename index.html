@@ -1,332 +1,377 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Labis Laundry - Invoice</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .invoice-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 20px;
-        }
-        
-        .business-info h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .invoice-info {
-            text-align: right;
-        }
-        
-        .invoice-info h2 {
-            color: #3498db;
-            margin-bottom: 10px;
-        }
-        
-        .client-info {
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        .items-table th {
-            background-color: #3498db;
-            color: white;
-            text-align: left;
-            padding: 12px 15px;
-        }
-        
-        .items-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .items-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        .status-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-        
-        .payment-status {
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            width: 48%;
-        }
-        
-        .paid {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .unpaid {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .totals {
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        
-        .totals td {
-            padding: 8px 15px;
-            text-align: right;
-        }
-        
-        .totals tr.total-row {
-            font-weight: bold;
-            font-size: 1.2em;
-            border-top: 2px solid #3498db;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-print {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .btn-print:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-download {
-            background-color: #2ecc71;
-            color: white;
-        }
-        
-        .btn-download:hover {
-            background-color: #27ae60;
-        }
-        
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-            
-            .invoice-container {
-                box-shadow: none;
-                padding: 0;
-            }
-            
-            .action-buttons {
-                display: none;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-            }
-            
-            .invoice-info {
-                text-align: left;
-                margin-top: 20px;
-            }
-            
-            .status-section {
-                flex-direction: column;
-            }
-            
-            .payment-status {
-                width: 100%;
-                margin-bottom: 15px;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Labis Laundary — Receipt / Invoice</title>
+<style>
+  :root{--bg:#f7fafc;--card:#fff;--muted:#6b7280;--accent:#111827;--green:#10b981;--yellow:#f59e0b;}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; background:var(--bg); color:#0f172a; margin:0; padding:24px; -webkit-print-color-adjust:exact;}
+  .container{max-width:900px;margin:0 auto;}
+  .card{background:var(--card); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(2,6,23,0.06);}
+  h1{margin:0;font-size:20px;}
+  .muted{color:var(--muted); font-size:13px;}
+  .grid{display:grid;gap:12px;}
+  .row-2{grid-template-columns:1fr 320px;}
+  label{display:block;font-size:12px;color:var(--muted); margin-bottom:6px;}
+  input[type="text"], input[type="number"], input[type="date"], select{width:100%; padding:8px 10px; border-radius:8px; border:1px solid #e6e9ef; font-size:14px;}
+  table{width:100%; border-collapse:collapse; margin-top:10px;}
+  th,td{padding:8px 6px; text-align:left; font-size:14px; border-bottom:1px solid #f1f5f9;}
+  th{text-align:left; font-weight:600; color:var(--muted); font-size:13px;}
+  .text-right{text-align:right;}
+  .tabular{font-variant-numeric:tabular-nums;}
+  .controls{display:flex; gap:8px; flex-wrap:wrap;}
+  button{background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;}
+  button.ghost{background:transparent;color:var(--accent); border:1px solid #e6e9ef;}
+  button.warn{background:var(--yellow); color:#1f2937;}
+  .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;}
+  .paid{background:#ecfdf5;color: #065f46;border:1px solid rgba(16,185,129,0.12);}
+  .unpaid{background:#fffbeb;color:#92400e;border:1px solid rgba(245,158,11,0.12);}
+  .totals{display:flex; justify-content:flex-end; margin-top:12px;}
+  .totals .box{width:320px; background:#fafafa; padding:12px; border-radius:8px; border:1px solid #f1f5f9;}
+  .small{font-size:13px;color:var(--muted);}
+  .no-print{display:block;}
+  @media print{
+    body{padding:0;}
+    .no-print{display:none !important;}
+    .card{box-shadow:none;border-radius:0;}
+  }
+  /* small helpers */
+  .inline{display:inline-block}
+  .flex{display:flex;gap:8px;align-items:center}
+  .right{margin-left:auto}
+  .danger{background:#fee2e2;color:#991b1b;border:1px solid rgba(220,38,38,0.08)}
+  .small-input{width:110px}
+</style>
 </head>
 <body>
-    <div class="invoice-container">
-        <div class="header">
-            <div class="business-info">
-                <h1>Labis Laundry</h1>
-                <p>123 Laundry Street, Mogadishu</p>
-                <p>Tel: +252 61 234 5678</p>
-                <p>Email: info@labislaundry.com</p>
-            </div>
-            
-            <div class="invoice-info">
-                <h2>INVOICE</h2>
-                <p>Invoice #: LB2023001</p>
-                <p>Date: <span id="current-date"></span></p>
-            </div>
+  <div class="container">
+    <div class="card">
+      <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;">
+        <div>
+          <h1 contenteditable="true" id="bizName">labis laundary</h1>
+          <div class="muted" contenteditable="true" id="bizAddress">Cinwaan: --</div>
+          <div class="muted" contenteditable="true" id="bizPhone">Tel: +2527xxxxxxx · info@example.com</div>
         </div>
-        
-        <div class="client-info">
-            <h3>Customer Information</h3>
-            <p>Name: Ahmed Mohamed</p>
-            <p>Phone: +252 61 987 6543</p>
-            <p>Address: 456 Customer Avenue, Mogadishu</p>
+        <div style="text-align:right">
+          <div class="small">Invoice # <input id="invoiceNo" type="number" value="1" style="width:80px; padding:6px;border-radius:6px;border:1px solid #e6e9ef"></div>
+          <div class="small" style="margin-top:6px">Taariikh: <input id="invoiceDate" type="date"></div>
+          <div id="paidBadge" style="margin-top:10px"></div>
         </div>
-        
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Unit Price ($)</th>
-                    <th>Total ($)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Shirts - Washing and Ironing</td>
-                    <td>5</td>
-                    <td>3.00</td>
-                    <td>15.00</td>
-                </tr>
-                <tr>
-                    <td>Trousers - Dry Cleaning</td>
-                    <td>3</td>
-                    <td>5.00</td>
-                    <td>15.00</td>
-                </tr>
-                <tr>
-                    <td>Traditional Dress - Special Care</td>
-                    <td>2</td>
-                    <td>8.00</td>
-                    <td>16.00</td>
-                </tr>
-                <tr>
-                    <td>Bed Sheets</td>
-                    <td>4</td>
-                    <td>4.50</td>
-                    <td>18.00</td>
-                </tr>
-                <tr>
-                    <td>Curtains</td>
-                    <td>2</td>
-                    <td>12.00</td>
-                    <td>24.00</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div class="status-section">
-            <div class="payment-status paid">
-                <h3>Paid: $50.00</h3>
-                <p>Date: <span id="paid-date"></span></p>
-                <p>Method: Cash</p>
-            </div>
-            
-            <div class="payment-status unpaid">
-                <h3>Unpaid: $38.00</h3>
-                <p>Due Date: <span id="due-date"></span></p>
-                <p>Please pay within 7 days</p>
-            </div>
-        </div>
-        
-        <table class="totals">
-            <tr>
-                <td>Subtotal:</td>
-                <td>$88.00</td>
-            </tr>
-            <tr>
-                <td>Tax (5%):</td>
-                <td>$4.40</td>
-            </tr>
-            <tr class="total-row">
-                <td>Total Amount:</td>
-                <td>$92.40</td>
-            </tr>
-        </table>
-        
-        <div class="footer">
-            <p>Thank you for choosing Labis Laundry!</p>
-            <p>We provide quality cleaning with care</p>
-            <p>Terms: Payment due within 7 days of invoice date</p>
-            
-            <div class="action-buttons">
-                <button class="btn btn-print" onclick="window.print()">Print Receipt</button>
-                <button class="btn btn-download" onclick="downloadPDF()">Download PDF</button>
-            </div>
-        </div>
-    </div>
+      </div>
 
-    <script>
-        // Set current date
-        const now = new Date();
-        document.getElementById('current-date').textContent = now.toLocaleDateString();
-        
-        // Set paid date (2 days ago)
-        const paidDate = new Date();
-        paidDate.setDate(paidDate.getDate() - 2);
-        document.getElementById('paid-date').textContent = paidDate.toLocaleDateString();
-        
-        // Set due date (7 days from now)
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + 7);
-        document.getElementById('due-date').textContent = dueDate.toLocaleDateString();
-        
-        // PDF download function (simulated)
-        function downloadPDF() {
-            alert("PDF download functionality would be implemented with a backend service in a real application");
-        }
-    </script>
+      <hr style="margin:12px 0;border:none;border-top:1px solid #f1f5f9">
+
+      <div class="grid row-2">
+        <div>
+          <label>Macmiil (Magac)</label>
+          <input id="custName" type="text" placeholder="Magaca Macmiilka">
+          <label style="margin-top:8px">Telefoon</label>
+          <input id="custPhone" type="text" placeholder="Tel Macmiilka">
+        </div>
+
+        <div>
+          <label>Xaaladda Bixinta</label>
+          <div class="flex">
+            <label class="inline"><input type="radio" name="paidState" value="paid" id="paidYes"> <strong>Paid</strong></label>
+            <label class="inline"><input type="radio" name="paidState" value="unpaid" id="paidNo" checked> <strong>Unpaid</strong></label>
+            <div class="right small muted">Dooro ka dibna daabac</div>
+          </div>
+
+          <label style="margin-top:8px">Lacag (Currency)</label>
+          <select id="currency">
+            <option value="ETB">ETB (Br)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Alaabooyinka (Laundry)</strong></div>
+          <div class="no-print flex">
+            <select id="quickAdd">
+              <option value="">+ Ku dar shay degdeg...</option>
+              <option value="Shaadh">Shaadh (Shirt)</option>
+              <option value="Garan">Garan (Jacket)</option>
+              <option value="Surwal">Surwal (Pants)</option>
+              <option value="Macawis">Macawis (Dress)</option>
+              <option value="Suudh">Suudh (Suit)</option>
+            </select>
+            <button class="ghost" id="addCustom">+ Custom</button>
+            <button class="ghost" id="resetBtn">Invoice Cusub</button>
+          </div>
+        </div>
+
+        <table id="itemsTable" aria-label="items">
+          <thead>
+            <tr>
+              <th style="width:160px">Nooca / Item</th>
+              <th>Sharaxaad</th>
+              <th style="width:90px" class="text-right">Tiro</th>
+              <th style="width:120px" class="text-right">Qiime</th>
+              <th style="width:120px" class="text-right">Wadarta</th>
+              <th class="no-print" style="width:70px"></th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:space-between">
+        <div class="small muted">Canshuur % <input id="taxRate" type="number" class="small-input" min="0" step="0.01" value="0"> &nbsp; Dhimis (lacag) <input id="discount" type="number" class="small-input" min="0" step="0.01" value="0"></div>
+        <div class="controls no-print">
+          <button id="printBtn">Daabac / PDF</button>
+          <button id="exportJson" class="ghost">Export JSON</button>
+          <button id="clearStorage" class="danger">Tirtir Xogta</button>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="box">
+          <div style="display:flex;justify-content:space-between"><div class="small">Isku-geyn</div><div class="tabular" id="subtotal">Br 0.00</div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px"><div class="small">Canshuur</div><div class="tabular" id="taxAmount">Br 0.00</div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px"><div class="small">Dhimis</div><div class="tabular" id="discountAmount">Br 0.00</div></div>
+          <hr style="margin:8px 0;border:none;border-top:1px solid #f1f5f9">
+          <div style="display:flex;justify-content:space-between"><div style="font-weight:700">Wadarta</div><div style="font-size:18px;font-weight:800" id="grandTotal">Br 0.00</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;border-top:1px dashed #eef2f7;padding-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="small muted">TIN/VAT: <span contenteditable id="taxId">TIN/VAT</span></div>
+          <div style="text-align:right">
+            <div id="signature" class="muted small">Mahadsanid! — labis laundary</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+/*
+  Simple single-file receipt/invoice for "labis laundary".
+  - Uses localStorage key 'labis_receipt_v1'
+  - Editable fields, add/remove items, print, export JSON
+*/
+(function(){
+  const STORAGE = 'labis_receipt_v1';
+  const currencySymbols = { ETB: 'Br', USD: '$', EUR: '€' };
+
+  // elements
+  const itemsBody = document.getElementById('itemsBody');
+  const quickAdd = document.getElementById('quickAdd');
+  const addCustom = document.getElementById('addCustom');
+  const invoiceNo = document.getElementById('invoiceNo');
+  const invoiceDate = document.getElementById('invoiceDate');
+  const custName = document.getElementById('custName');
+  const custPhone = document.getElementById('custPhone');
+  const taxRate = document.getElementById('taxRate');
+  const discount = document.getElementById('discount');
+  const subtotalEl = document.getElementById('subtotal');
+  const taxAmountEl = document.getElementById('taxAmount');
+  const discountAmountEl = document.getElementById('discountAmount');
+  const grandTotalEl = document.getElementById('grandTotal');
+  const printBtn = document.getElementById('printBtn');
+  const exportJson = document.getElementById('exportJson');
+  const resetBtn = document.getElementById('resetBtn');
+  const clearStorage = document.getElementById('clearStorage');
+  const paidYes = document.getElementById('paidYes');
+  const paidNo = document.getElementById('paidNo');
+  const paidBadge = document.getElementById('paidBadge');
+  const currencySelect = document.getElementById('currency');
+  const bizName = document.getElementById('bizName');
+  const bizAddress = document.getElementById('bizAddress');
+  const bizPhone = document.getElementById('bizPhone');
+  const taxId = document.getElementById('taxId');
+
+  // state
+  let state = {
+    biz: { name: 'labis laundary', address:'Cinwaan: --', phone:'+2527xxxxxxx', taxId:'TIN/VAT'},
+    invoiceNo: 1,
+    invoiceDate: (new Date()).toISOString().slice(0,10),
+    customer: { name:'', phone:'' },
+    currency: 'ETB',
+    items: [],
+    taxRate: 0,
+    discount: 0,
+    isPaid: false
+  };
+
+  // helpers
+  const uid = ()=> 'id'+Math.random().toString(36).slice(2,9);
+  const money = (n)=> Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  // load/save
+  function load(){
+    const raw = localStorage.getItem(STORAGE);
+    if(raw){
+      try{ Object.assign(state, JSON.parse(raw)); }catch(e){ console.warn('load err',e); }
+    }
+    // init defaults if no items
+    if(!state.items || state.items.length===0){
+      state.items = [{ id:uid(), type:'Shaadh', name:'Shaadh', qty:1, price:0 }];
+    }
+    renderAll();
+  }
+  function save(){
+    localStorage.setItem(STORAGE, JSON.stringify(state));
+  }
+
+  // render rows
+  function renderAll(){
+    // header / fields
+    bizName.innerText = state.biz.name || 'labis laundary';
+    bizAddress.innerText = state.biz.address || '';
+    bizPhone.innerText = state.biz.phone || '';
+    taxId.innerText = state.biz.taxId || '';
+    invoiceNo.value = state.invoiceNo;
+    invoiceDate.value = state.invoiceDate;
+    custName.value = state.customer.name || '';
+    custPhone.value = state.customer.phone || '';
+    currencySelect.value = state.currency || 'ETB';
+    taxRate.value = state.taxRate || 0;
+    discount.value = state.discount || 0;
+    paidYes.checked = state.isPaid === true;
+    paidNo.checked = state.isPaid === false;
+
+    // paid badge
+    renderBadge();
+
+    // table
+    itemsBody.innerHTML = '';
+    state.items.forEach((it, index) => {
+      const tr = document.createElement('tr');
+
+      // type
+      const tdType = document.createElement('td');
+      const sel = document.createElement('select');
+      ['Shaadh','Garan','Surwal','Macawis','Suudh','Custom'].forEach(opt=>{
+        const o = document.createElement('option'); o.value = opt; o.innerText = opt; if(opt===it.type) o.selected = true; sel.appendChild(o);
+      });
+      sel.addEventListener('change', e=>{ it.type = e.target.value; it.name = e.target.value; save(); renderAll(); });
+      tdType.appendChild(sel);
+
+      // name/desc
+      const tdName = document.createElement('td');
+      const inName = document.createElement('input');
+      inName.type='text'; inName.value = it.name || ''; inName.addEventListener('input', e=>{ it.name = e.target.value; save(); renderTotals(); });
+      tdName.appendChild(inName);
+
+      // qty
+      const tdQty = document.createElement('td');
+      tdQty.className='text-right';
+      const inQty = document.createElement('input'); inQty.type='number'; inQty.min=0; inQty.value = it.qty; inQty.style.width='70px';
+      inQty.addEventListener('input', e=>{ it.qty = Number(e.target.value||0); save(); renderTotals(); });
+      tdQty.appendChild(inQty);
+
+      // price
+      const tdPrice = document.createElement('td');
+      tdPrice.className='text-right';
+      const inPrice = document.createElement('input'); inPrice.type='number'; inPrice.min=0; inPrice.step='0.01'; inPrice.value = it.price; inPrice.style.width='90px';
+      inPrice.addEventListener('input', e=>{ it.price = Number(e.target.value||0); save(); renderTotals(); });
+      tdPrice.appendChild(inPrice);
+
+      // line total
+      const tdLine = document.createElement('td');
+      tdLine.className='text-right tabular';
+      tdLine.innerText = currencySymbols[state.currency]+' '+ money( (it.qty||0)*(it.price||0) );
+
+      // actions
+      const tdAct = document.createElement('td'); tdAct.className='no-print';
+      const del = document.createElement('button'); del.className='ghost'; del.innerText='Delete';
+      del.addEventListener('click', ()=>{ state.items = state.items.filter(x=>x.id!==it.id); save(); renderAll(); });
+      tdAct.appendChild(del);
+
+      tr.append(tdType, tdName, tdQty, tdPrice, tdLine, tdAct);
+      itemsBody.appendChild(tr);
+    });
+
+    renderTotals();
+  }
+
+  function renderTotals(){
+    const subtotal = state.items.reduce((s,it)=> s + (Number(it.qty)||0)*(Number(it.price)||0), 0);
+    const tax = subtotal * (Number(state.taxRate||0)/100);
+    const discountAmt = Number(state.discount||0);
+    const total = Math.max(0, subtotal + tax - discountAmt);
+    const sym = currencySymbols[state.currency] || state.currency;
+
+    subtotalEl.innerText = sym + ' ' + money(subtotal);
+    taxAmountEl.innerText = sym + ' ' + money(tax);
+    discountAmountEl.innerText = sym + ' ' + money(discountAmt);
+    grandTotalEl.innerText = sym + ' ' + money(total);
+  }
+
+  function renderBadge(){
+    paidBadge.innerHTML = '';
+    const sp = document.createElement('span'); sp.className='badge ' + (state.isPaid ? 'paid' : 'unpaid');
+    sp.innerText = state.isPaid ? 'PAID' : 'UNPAID';
+    paidBadge.appendChild(sp);
+  }
+
+  // actions
+  quickAdd.addEventListener('change', e=>{
+    const v = e.target.value; if(!v) return;
+    state.items.push({ id:uid(), type:v, name:v, qty:1, price:0 }); save(); renderAll(); e.target.value='';
+  });
+
+  addCustom.addEventListener('click', ()=> {
+    const name = prompt('Geli magaca shayga (e.g. Tshirt / Bedding):','Custom item');
+    if(name) { state.items.push({ id:uid(), type:'Custom', name, qty:1, price:0 }); save(); renderAll(); }
+  });
+
+  invoiceNo.addEventListener('change', ()=>{ state.invoiceNo = invoiceNo.value; save(); });
+  invoiceDate.addEventListener('change', ()=>{ state.invoiceDate = invoiceDate.value; save(); });
+  custName.addEventListener('input', ()=>{ state.customer.name = custName.value; save(); });
+  custPhone.addEventListener('input', ()=>{ state.customer.phone = custPhone.value; save(); });
+  taxRate.addEventListener('input', ()=>{ state.taxRate = Number(taxRate.value||0); save(); renderTotals(); });
+  discount.addEventListener('input', ()=>{ state.discount = Number(discount.value||0); save(); renderTotals(); });
+  currencySelect.addEventListener('change', ()=>{ state.currency = currencySelect.value; save(); renderAll(); });
+
+  paidYes.addEventListener('change', ()=>{ state.isPaid = true; save(); renderBadge(); });
+  paidNo.addEventListener('change', ()=>{ state.isPaid = false; save(); renderBadge(); });
+
+  printBtn.addEventListener('click', ()=>{ window.print(); });
+  exportJson.addEventListener('click', ()=>{
+    const data = JSON.stringify(state, null, 2);
+    const blob = new Blob([data], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `invoice-${state.invoiceNo||'0'}.json`; a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    if(!confirm('Invoice cusub — xog hore waa la kordhin doonaa? Haa sii wad.')) return;
+    state.invoiceNo = Number(state.invoiceNo||0) + 1;
+    state.items = [{ id:uid(), type:'Shaadh', name:'Shaadh', qty:1, price:0 }];
+    state.customer = { name:'', phone:'' };
+    state.taxRate = 0; state.discount = 0; state.isPaid = false;
+    save(); renderAll();
+  });
+
+  clearStorage.addEventListener('click', ()=>{
+    if(confirm('Ma hubtaa inaad tirtirayso xogta localStorage?')) { localStorage.removeItem(STORAGE); location.reload(); }
+  });
+
+  // editable biz fields save
+  bizName.addEventListener('input', ()=>{ state.biz.name = bizName.innerText; save(); });
+  bizAddress.addEventListener('input', ()=>{ state.biz.address = bizAddress.innerText; save(); });
+  bizPhone.addEventListener('input', ()=>{ state.biz.phone = bizPhone.innerText; save(); });
+  taxId.addEventListener('input', ()=>{ state.biz.taxId = taxId.innerText; save(); });
+
+  // initial load: set date default to today if empty
+  document.addEventListener('DOMContentLoaded', ()=>{
+    load();
+    if(!state.invoiceDate) { state.invoiceDate = (new Date()).toISOString().slice(0,10); invoiceDate.value = state.invoiceDate; save(); }
+  });
+
+})();
+</script>
 </body>
 </html>
